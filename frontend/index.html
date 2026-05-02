@@ -6,11 +6,6 @@
   <meta name="description" content="GATEKEEP — Home network security dashboard. Detect APT28 router compromise.">
   <title>GATEKEEP — Network Security Dashboard</title>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
   <!-- Styles -->
   <link rel="stylesheet" href="/static/css/styles.css">
   <link rel="stylesheet" href="/static/css/components.css">
@@ -444,6 +439,28 @@
           <button class="btn btn-secondary" id="btn-check-status">Refresh Status</button>
         </div>
         <div class="modal__feedback hidden" id="settings-feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================== -->
+  <!-- TOKEN AUTH MODAL                                                    -->
+  <!-- ================================================================== -->
+  <div class="modal-overlay hidden" id="token-modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="token-title">
+      <div class="modal__header">
+        <h2 class="modal__title" id="token-title">Enter Access Token</h2>
+      </div>
+      <div class="modal__body">
+        <p class="form-hint">Paste the access token shown in the GATEKEEP server console output.</p>
+        <div class="form-group" style="margin-top:1rem;">
+          <label class="form-label" for="token-input">Access Token</label>
+          <input class="form-input form-input--mono" type="password" id="token-input" placeholder="Paste token here" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="modal__feedback modal__feedback--error hidden" id="token-error"></div>
+        <div class="modal__actions" style="margin-top:1rem;">
+          <button class="btn btn-secondary" id="btn-token-submit">Connect</button>
+        </div>
       </div>
     </div>
   </div>

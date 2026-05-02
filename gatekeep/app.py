@@ -8,7 +8,7 @@ handlers, static file serving, and database lifecycle management.
 from __future__ import annotations
 
 import asyncio
-import time
+import secrets
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import AsyncGenerator
@@ -17,6 +17,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from gatekeep import __app_name__, __version__
 from gatekeep.api.router import api_router, ws_router
@@ -100,6 +101,18 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         host=config.app.host,
         port=config.app.port,
     )
+
+    # ----------------------------------------------------------------
+    # 1b. API Authentication Token
+    # ----------------------------------------------------------------
+    auth_token = secrets.token_urlsafe(32)
+    app.state.auth_token = auth_token
+    # Print to console so the operator can copy it into the frontend
+    print(f"\n  Access token: {auth_token}\n")
+    logger.info("auth_token_generated")
+
+    # Router admin client placeholder (set via /api/v1/router/connect)
+    app.state.router_client = None
 
     # ----------------------------------------------------------------
     # 2. Database
@@ -255,6 +268,21 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     logger.info("database_connections_closed")
 
 
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """Add defensive HTTP headers to every response."""
+
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "0"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers["Permissions-Policy"] = (
+            "camera=(), microphone=(), geolocation=()"
+        )
+        return response
+
+
 def create_app() -> FastAPI:
     """
     Build and return the fully configured FastAPI application.
@@ -272,6 +300,9 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
+    # Security headers (added before CORS so they apply to all responses)
+    app.add_middleware(SecurityHeadersMiddleware)
+
     # CORS middleware for local development
     app.add_middleware(
         CORSMiddleware,
@@ -280,8 +311,8 @@ def create_app() -> FastAPI:
             "http://127.0.0.1:8443",
         ],
         allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+        allow_headers=["Content-Type", "Authorization"],
     )
 
     # Register exception handlers
@@ -301,6 +332,12 @@ def create_app() -> FastAPI:
             StaticFiles(directory=str(static_path)),
             name="static",
         )
+
+    # Public health endpoint (no auth required) so the frontend can
+    # check connectivity before the user has entered the access token.
+    @app.get("/api/v1/system/health-public", include_in_schema=False)
+    async def public_health():
+        return JSONResponse(content={"status": "ok", "version": __version__})
 
     # Root route serves index.html
     @app.get("/", include_in_schema=False, response_model=None)

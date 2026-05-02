@@ -9,15 +9,35 @@ manufacturers, and Windows/SMB hostnames.
 from __future__ import annotations
 
 import asyncio
+import ipaddress
 import re
 import socket
 import struct
 from dataclasses import dataclass
 from typing import Optional
+from urllib.parse import urlparse
 
 import httpx
 
 from gatekeep.logging_config import get_logger
+
+
+def _is_private_url(url: str) -> bool:
+    """Check if a URL points to a private/link-local IP address.
+
+    Only allows fetching UPnP descriptions from RFC 1918 or link-local
+    addresses.  Rejects DNS hostnames to prevent DNS rebinding SSRF.
+    """
+    try:
+        parsed = urlparse(url)
+        hostname = parsed.hostname
+        if not hostname:
+            return False
+        addr = ipaddress.ip_address(hostname)
+        return addr.is_private or addr.is_link_local
+    except ValueError:
+        # hostname is a DNS name, not a raw IP — reject to prevent SSRF
+        return False
 
 
 @dataclass
@@ -156,7 +176,7 @@ class NetworkDiscovery:
             async with httpx.AsyncClient(verify=False, timeout=3) as client:
                 for ip, info in list(results.items()):
                     location = info.get("location", "")
-                    if location and location.startswith("http"):
+                    if location and location.startswith("http") and _is_private_url(location):
                         try:
                             r = await client.get(location)
                             xml = r.text

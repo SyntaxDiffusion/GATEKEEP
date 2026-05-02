@@ -8,9 +8,7 @@ query router system information.
 
 from __future__ import annotations
 
-from typing import Optional
-
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 
 from gatekeep.engines.router_admin import FiosRouterClient
@@ -20,8 +18,6 @@ from gatekeep.schemas import ApiResponse
 router = APIRouter(prefix="/router", tags=["router"])
 logger = get_logger("router_admin_routes")
 
-_router_client: Optional[FiosRouterClient] = None
-
 
 class RouterLoginRequest(BaseModel):
     """Request body for router authentication."""
@@ -30,19 +26,25 @@ class RouterLoginRequest(BaseModel):
     router_ip: str = "192.168.1.1"
 
 
-@router.post("/connect")
-async def connect_router(body: RouterLoginRequest) -> ApiResponse:
-    """Connect and authenticate with the router admin interface."""
-    global _router_client  # noqa: PLW0603
-    _router_client = FiosRouterClient(router_ip=body.router_ip)
+def _get_client(request: Request) -> FiosRouterClient | None:
+    """Retrieve the router client from application state."""
+    return getattr(request.app.state, "router_client", None)
 
-    reachable = await _router_client.connect()
+
+@router.post("/connect")
+async def connect_router(body: RouterLoginRequest, request: Request) -> ApiResponse:
+    """Connect and authenticate with the router admin interface."""
+    client = FiosRouterClient(router_ip=body.router_ip)
+
+    reachable = await client.connect()
     if not reachable:
         raise HTTPException(status_code=503, detail="Cannot reach router")
 
-    logged_in = await _router_client.login(body.password)
+    logged_in = await client.login(body.password)
     if not logged_in:
         raise HTTPException(status_code=401, detail="Invalid router password")
+
+    request.app.state.router_client = client
 
     return ApiResponse(
         status="success",
@@ -51,15 +53,16 @@ async def connect_router(body: RouterLoginRequest) -> ApiResponse:
 
 
 @router.get("/devices")
-async def get_router_devices() -> ApiResponse:
+async def get_router_devices(request: Request) -> ApiResponse:
     """Get connected devices from router admin interface."""
-    if _router_client is None:
+    client = _get_client(request)
+    if client is None:
         raise HTTPException(
             status_code=400,
             detail="Not connected to router. POST /api/v1/router/connect first.",
         )
 
-    devices = await _router_client.get_connected_devices()
+    devices = await client.get_connected_devices()
     return ApiResponse(
         status="success",
         data={
@@ -79,15 +82,16 @@ async def get_router_devices() -> ApiResponse:
 
 
 @router.get("/info")
-async def get_router_system_info() -> ApiResponse:
+async def get_router_system_info(request: Request) -> ApiResponse:
     """Get router system information (model, firmware, DNS, etc.)."""
-    if _router_client is None:
+    client = _get_client(request)
+    if client is None:
         raise HTTPException(
             status_code=400,
             detail="Not connected to router. POST /api/v1/router/connect first.",
         )
 
-    info = await _router_client.get_router_info()
+    info = await client.get_router_info()
     return ApiResponse(
         status="success",
         data={
@@ -102,15 +106,16 @@ async def get_router_system_info() -> ApiResponse:
 
 
 @router.get("/wifi-clients")
-async def get_router_wifi_clients() -> ApiResponse:
+async def get_router_wifi_clients(request: Request) -> ApiResponse:
     """Get WiFi-specific client information from the router."""
-    if _router_client is None:
+    client = _get_client(request)
+    if client is None:
         raise HTTPException(
             status_code=400,
             detail="Not connected to router. POST /api/v1/router/connect first.",
         )
 
-    clients = await _router_client.get_wifi_clients()
+    clients = await client.get_wifi_clients()
     return ApiResponse(
         status="success",
         data={"clients": clients, "count": len(clients)},
@@ -118,11 +123,10 @@ async def get_router_wifi_clients() -> ApiResponse:
 
 
 @router.get("/status")
-async def get_router_connection_status() -> ApiResponse:
+async def get_router_connection_status(request: Request) -> ApiResponse:
     """Check if we have an active connection to the router."""
-    connected = (
-        _router_client is not None and _router_client._token is not None
-    )
+    client = _get_client(request)
+    connected = client is not None and client.is_authenticated
     return ApiResponse(
         status="success",
         data={"connected": connected},
@@ -130,12 +134,12 @@ async def get_router_connection_status() -> ApiResponse:
 
 
 @router.post("/disconnect")
-async def disconnect_router() -> ApiResponse:
+async def disconnect_router(request: Request) -> ApiResponse:
     """Close the connection to the router admin interface."""
-    global _router_client  # noqa: PLW0603
-    if _router_client is not None:
-        await _router_client.close()
-        _router_client = None
+    client = _get_client(request)
+    if client is not None:
+        await client.close()
+        request.app.state.router_client = None
     return ApiResponse(
         status="success",
         data={"message": "Disconnected from router"},

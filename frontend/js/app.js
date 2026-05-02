@@ -32,6 +32,9 @@ class GatekeepApp {
    * Bootstrap the application.
    */
   async init() {
+    // Authenticate before doing anything else
+    await this._ensureAuthenticated();
+
     // Initialize components
     this.networkMap = new NetworkMap();
     window.networkMap = this.networkMap;
@@ -64,6 +67,87 @@ class GatekeepApp {
     this._initPhaseComponents();
 
     console.log('[GATEKEEP] Application initialized');
+  }
+
+  // -----------------------------------------------------------------
+  //  Authentication
+  // -----------------------------------------------------------------
+
+  /**
+   * Ensure a valid access token is available.  Checks sessionStorage
+   * first; if absent, shows a modal prompting the user to enter the
+   * token printed in the GATEKEEP server console output.
+   */
+  async _ensureAuthenticated() {
+    const stored = sessionStorage.getItem('gatekeep_token');
+    if (stored) {
+      api.setToken(stored);
+      // Quick validation
+      try {
+        await api.getSystemHealth();
+        return; // token is valid
+      } catch (err) {
+        if (err.status === 401) {
+          sessionStorage.removeItem('gatekeep_token');
+        } else {
+          // Server may be down — let it proceed and fail later
+          return;
+        }
+      }
+    }
+
+    // Show the token modal and wait for the user to enter it
+    await this._showTokenPrompt();
+  }
+
+  _showTokenPrompt() {
+    return new Promise((resolve) => {
+      const overlay = document.getElementById('token-modal');
+      const input = document.getElementById('token-input');
+      const btn = document.getElementById('btn-token-submit');
+      const errorEl = document.getElementById('token-error');
+
+      if (!overlay || !input || !btn) {
+        // Fallback: modal markup missing — cannot enforce auth in UI
+        console.warn('[GATEKEEP] Token modal not found in DOM');
+        resolve();
+        return;
+      }
+
+      overlay.classList.remove('hidden');
+      input.value = '';
+      input.focus();
+      errorEl.classList.add('hidden');
+
+      const submit = async () => {
+        const token = input.value.trim();
+        if (!token) return;
+
+        btn.disabled = true;
+        btn.textContent = 'Verifying...';
+        errorEl.classList.add('hidden');
+
+        api.setToken(token);
+        try {
+          await api.getSystemHealth();
+          sessionStorage.setItem('gatekeep_token', token);
+          overlay.classList.add('hidden');
+          resolve();
+        } catch (err) {
+          api.setToken(null);
+          errorEl.textContent = err.status === 401
+            ? 'Invalid token. Check the GATEKEEP console output.'
+            : `Connection error: ${err.message}`;
+          errorEl.classList.remove('hidden');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Connect';
+        }
+      };
+
+      btn.onclick = submit;
+      input.onkeydown = (e) => { if (e.key === 'Enter') submit(); };
+    });
   }
 
   // -----------------------------------------------------------------

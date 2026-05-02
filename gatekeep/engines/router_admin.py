@@ -68,6 +68,11 @@ class FiosRouterClient:
         self._client: Optional[httpx.AsyncClient] = None
         self._logger = get_logger("router_admin")
 
+    @property
+    def is_authenticated(self) -> bool:
+        """Return True if a session token has been obtained."""
+        return self._token is not None
+
     # ------------------------------------------------------------------
     # Cryptographic helpers (replicate the router's JS login_encode)
     # ------------------------------------------------------------------

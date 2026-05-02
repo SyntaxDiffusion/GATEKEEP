@@ -526,7 +526,7 @@ class ScanControls {
                 <div class="router-info__details">
                   ${fp.firmware_version ? `<span class="router-info__detail-item">Firmware: <strong class="mono">${escapeHtml(fp.firmware_version)}</strong></span>` : ''}
                   ${fp.fingerprint_method ? `<span class="router-info__detail-item">Method: ${escapeHtml(fp.fingerprint_method)}</span>` : ''}
-                  ${fp.admin_panel_url ? `<span class="router-info__detail-item"><a href="${escapeHtml(fp.admin_panel_url)}" target="_blank" rel="noopener">Admin Panel</a></span>` : ''}
+                  ${fp.admin_panel_url && (fp.admin_panel_url.startsWith('http://') || fp.admin_panel_url.startsWith('https://')) ? `<span class="router-info__detail-item"><a href="${escapeHtml(fp.admin_panel_url)}" target="_blank" rel="noopener">Admin Panel</a></span>` : ''}
                 </div>
                 ${isVuln ? `
                   <div class="vuln-list">

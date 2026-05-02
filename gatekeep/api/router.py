@@ -8,9 +8,10 @@ so it resolves at ``/ws/events``.
 
 from __future__ import annotations
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from gatekeep.api.alert_routes import router as alert_router
+from gatekeep.api.deps import verify_token
 from gatekeep.api.device_routes import router as device_router
 from gatekeep.api.dns_routes import router as dns_router
 from gatekeep.api.hardening_routes import router as hardening_router
@@ -20,7 +21,7 @@ from gatekeep.api.scan_routes import router as scan_router
 from gatekeep.api.system_routes import router as system_router
 from gatekeep.api.websocket_routes import router as websocket_router
 
-api_router = APIRouter(prefix="/api/v1")
+api_router = APIRouter(prefix="/api/v1", dependencies=[Depends(verify_token)])
 
 # Mount sub-routers
 api_router.include_router(system_router)

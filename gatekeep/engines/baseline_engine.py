@@ -10,7 +10,6 @@ changes, DNS and firmware drift).
 from __future__ import annotations
 
 import json
-import socket
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Optional

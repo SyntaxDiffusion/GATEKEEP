@@ -17,6 +17,15 @@ class ApiClient {
     this.baseUrl = options.baseUrl || `${loc.protocol}//${loc.host}/api/v1`;
     this.debug = options.debug || false;
     this._requestId = 0;
+    this.token = options.token || null;
+  }
+
+  /**
+   * Set the bearer token used for API authentication.
+   * @param {string} token
+   */
+  setToken(token) {
+    this.token = token;
   }
 
   // -------------------------------------------------------------------
@@ -47,9 +56,14 @@ class ApiClient {
       });
     }
 
+    const headers = { 'Content-Type': 'application/json' };
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    }
+
     const fetchOptions = {
       method,
-      headers: { 'Content-Type': 'application/json' },
+      headers,
     };
 
     if (options.body !== undefined) {
@@ -330,7 +344,7 @@ class ApiClient {
    */
   async getHardeningRules(scanId) {
     const params = scanId ? { scan_id: scanId } : {};
-    return this._get('/hardening/rules', params);
+    return this._get('/hardening/recommendations', params);
   }
 
   // -------------------------------------------------------------------

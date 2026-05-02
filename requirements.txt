@@ -7,7 +7,7 @@ aiosqlite==0.21.0
 alembic==1.15.2
 scapy==2.6.1
 netifaces2==0.0.22
-claude-agent-sdk
+claude-agent-sdk==0.1.72
 httpx==0.28.1
 structlog==25.4.0
 apscheduler==3.11.0

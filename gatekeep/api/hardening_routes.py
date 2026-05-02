@@ -175,7 +175,7 @@ async def get_recommendations(
         logger.error("hardening_routes.get_recommendations_error", error=str(exc))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(exc),
+            detail="An internal error occurred.",
         ) from exc
 
     return ApiResponse(
@@ -285,7 +285,7 @@ async def create_baseline(
         logger.error("hardening_routes.create_baseline_error", error=str(exc))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(exc),
+            detail="An internal error occurred.",
         ) from exc
 
     return ApiResponse(
@@ -366,7 +366,7 @@ async def check_drift(
         logger.error("hardening_routes.drift_error", error=str(exc))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(exc),
+            detail="An internal error occurred.",
         ) from exc
 
     # Convert internal dict to the DriftResponse schema shape

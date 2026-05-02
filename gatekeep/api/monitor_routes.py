@@ -138,7 +138,15 @@ async def stop_monitoring(request: Request) -> ApiResponse[dict[str, Any]]:
     try:
         summary = await svc.stop_monitoring()
     except RuntimeError as exc:
-        raise HTTPException(status_code=409, detail=str(exc)) from exc
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "status": "error",
+                "data": None,
+                "error": {"message": str(exc)},
+                "meta": None,
+            },
+        ) from exc
 
     return ApiResponse[dict[str, Any]](status="success", data=summary)
 
