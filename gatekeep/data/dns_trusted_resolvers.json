@@ -1,0 +1,541 @@
+{
+  "_comment": "Trusted public DNS resolvers, known-malicious DNS infrastructure (APT28 FrostArmada), and common ISP DNS ranges. Sources: public resolver documentation, CISA AA24-038A (Feb 2024), FBI/CISA/NSA/NCSC AA26-097A (Apr 2026), Spamhaus, Shadowserver Foundation.",
+
+  "resolvers": [
+    {
+      "name": "Google Public DNS",
+      "ips": ["8.8.8.8", "8.8.4.4"],
+      "ipv6": ["2001:4860:4860::8888", "2001:4860:4860::8844"],
+      "provider": "Google LLC",
+      "asn": "AS15169",
+      "supports_doh": true,
+      "doh_url": "https://dns.google/dns-query",
+      "supports_dot": true,
+      "dot_hostname": "dns.google",
+      "supports_doq": false,
+      "dnssec_validation": true,
+      "logging_policy": "Limited — 48-hour temporary logs, anonymized after 24h per privacy policy",
+      "anycast": true,
+      "notes": "Most widely used public DNS globally. Reliable, fast anycast. Google logs DNS queries per privacy policy."
+    },
+    {
+      "name": "Cloudflare DNS",
+      "ips": ["1.1.1.1", "1.0.0.1"],
+      "ipv6": ["2606:4700:4700::1111", "2606:4700:4700::1001"],
+      "provider": "Cloudflare Inc.",
+      "asn": "AS13335",
+      "supports_doh": true,
+      "doh_url": "https://cloudflare-dns.com/dns-query",
+      "supports_dot": true,
+      "dot_hostname": "1dot1dot1dot1.cloudflare-dns.com",
+      "supports_doq": true,
+      "dnssec_validation": true,
+      "logging_policy": "No query logging per policy; audited by KPMG annually",
+      "anycast": true,
+      "notes": "Privacy-first DNS. Fastest resolver in many benchmarks. Cloudflare's 1.1.1.1 for Families variants: 1.1.1.2 (malware blocking), 1.1.1.3 (malware + adult content blocking)."
+    },
+    {
+      "name": "Cloudflare DNS for Families (malware blocking)",
+      "ips": ["1.1.1.2", "1.0.0.2"],
+      "ipv6": ["2606:4700:4700::1112", "2606:4700:4700::1002"],
+      "provider": "Cloudflare Inc.",
+      "asn": "AS13335",
+      "supports_doh": true,
+      "doh_url": "https://family.cloudflare-dns.com/dns-query",
+      "supports_dot": true,
+      "dot_hostname": "family.cloudflare-dns.com",
+      "supports_doq": false,
+      "dnssec_validation": true,
+      "logging_policy": "No query logging per policy",
+      "anycast": true,
+      "notes": "Blocks malware and phishing domains in addition to standard resolution."
+    },
+    {
+      "name": "Quad9",
+      "ips": ["9.9.9.9", "149.112.112.112"],
+      "ipv6": ["2620:fe::fe", "2620:fe::9"],
+      "provider": "Quad9 Foundation (non-profit, Switzerland)",
+      "asn": "AS19281",
+      "supports_doh": true,
+      "doh_url": "https://dns.quad9.net/dns-query",
+      "supports_dot": true,
+      "dot_hostname": "dns.quad9.net",
+      "supports_doq": true,
+      "dnssec_validation": true,
+      "logging_policy": "No IP address logging; aggregate statistics only; GDPR compliant under Swiss law",
+      "anycast": true,
+      "threat_intelligence": "Blocks malicious domains using feeds from 18+ threat intelligence partners including IBM X-Force, Abuse.ch, RiskIQ",
+      "notes": "Security-focused. Blocks domains associated with malware, phishing, botnets. Alternate non-blocking: 9.9.9.10 / 149.112.112.10"
+    },
+    {
+      "name": "OpenDNS Home",
+      "ips": ["208.67.222.222", "208.67.220.220"],
+      "ipv6": ["2620:119:35::35", "2620:119:53::53"],
+      "provider": "Cisco Umbrella (OpenDNS)",
+      "asn": "AS36692",
+      "supports_doh": false,
+      "supports_dot": false,
+      "supports_doq": false,
+      "dnssec_validation": false,
+      "logging_policy": "Logs queries; used for threat intelligence and parental control features",
+      "anycast": true,
+      "notes": "Cisco-owned. Supports customizable content filtering via OpenDNS dashboard. FamilyShield variant: 208.67.222.123 / 208.67.220.123."
+    },
+    {
+      "name": "OpenDNS FamilyShield",
+      "ips": ["208.67.222.123", "208.67.220.123"],
+      "provider": "Cisco Umbrella (OpenDNS)",
+      "asn": "AS36692",
+      "supports_doh": false,
+      "supports_dot": false,
+      "supports_doq": false,
+      "dnssec_validation": false,
+      "logging_policy": "Logs queries",
+      "anycast": true,
+      "notes": "Blocks adult content and malware. No account required."
+    },
+    {
+      "name": "AdGuard DNS (Default — ads + trackers)",
+      "ips": ["94.140.14.14", "94.140.15.15"],
+      "ipv6": ["2a10:50c0::ad1:ff", "2a10:50c0::ad2:ff"],
+      "provider": "AdGuard Software Limited",
+      "asn": "AS212772",
+      "supports_doh": true,
+      "doh_url": "https://dns.adguard-dns.com/dns-query",
+      "supports_dot": true,
+      "dot_hostname": "dns.adguard-dns.com",
+      "supports_doq": true,
+      "dnssec_validation": true,
+      "logging_policy": "No logging by default; optional for registered users",
+      "anycast": true,
+      "notes": "Blocks ads, trackers, and malware domains. Non-filtering variant: 94.140.14.140 / 94.140.14.141"
+    },
+    {
+      "name": "AdGuard DNS (Family Protection — ads + adult content)",
+      "ips": ["94.140.14.15", "94.140.15.16"],
+      "ipv6": ["2a10:50c0::bad1:ff", "2a10:50c0::bad2:ff"],
+      "provider": "AdGuard Software Limited",
+      "asn": "AS212772",
+      "supports_doh": true,
+      "doh_url": "https://family.adguard-dns.com/dns-query",
+      "supports_dot": true,
+      "dot_hostname": "family.adguard-dns.com",
+      "supports_doq": true,
+      "dnssec_validation": true,
+      "logging_policy": "No logging by default",
+      "anycast": true,
+      "notes": "Blocks ads, trackers, adult content, and malware."
+    },
+    {
+      "name": "CleanBrowsing Security Filter",
+      "ips": ["185.228.168.9", "185.228.169.9"],
+      "ipv6": ["2a0d:2a00:1::2", "2a0d:2a00:2::2"],
+      "provider": "CleanBrowsing",
+      "asn": "AS206216",
+      "supports_doh": true,
+      "doh_url": "https://doh.cleanbrowsing.org/doh/security-filter/",
+      "supports_dot": true,
+      "dot_hostname": "security-filter-dns.cleanbrowsing.org",
+      "supports_doq": false,
+      "dnssec_validation": true,
+      "logging_policy": "Anonymized aggregate logs only",
+      "anycast": true,
+      "notes": "Blocks malware, phishing, typosquatting. Family filter: 185.228.168.168 / 185.228.169.168. Adult filter: 185.228.168.10 / 185.228.169.11"
+    },
+    {
+      "name": "CleanBrowsing Family Filter",
+      "ips": ["185.228.168.168", "185.228.169.168"],
+      "ipv6": ["2a0d:2a00:1::", "2a0d:2a00:2::"],
+      "provider": "CleanBrowsing",
+      "asn": "AS206216",
+      "supports_doh": true,
+      "doh_url": "https://doh.cleanbrowsing.org/doh/family-filter/",
+      "supports_dot": true,
+      "dot_hostname": "family-filter-dns.cleanbrowsing.org",
+      "supports_doq": false,
+      "dnssec_validation": true,
+      "logging_policy": "Anonymized aggregate logs only",
+      "anycast": false,
+      "notes": "Blocks adult content, malware, and mixed-content HTTPS sites."
+    },
+    {
+      "name": "NextDNS",
+      "ips": ["45.90.28.0", "45.90.30.0"],
+      "ipv6": ["2a07:a8c0::", "2a07:a8c1::"],
+      "provider": "NextDNS Inc.",
+      "asn": "AS207427",
+      "supports_doh": true,
+      "doh_url": "https://dns.nextdns.io",
+      "supports_dot": true,
+      "dot_hostname": "dns.nextdns.io",
+      "supports_doq": true,
+      "dnssec_validation": true,
+      "logging_policy": "Configurable per account; logs retained max 30 days; can be disabled",
+      "anycast": true,
+      "notes": "Highly configurable privacy/security DNS. Per-account filtering with privacy analytics. Free tier available (300K queries/month). Specific configuration IPs assigned per account."
+    },
+    {
+      "name": "Comodo Secure DNS",
+      "ips": ["8.26.56.26", "8.20.247.20"],
+      "provider": "Comodo Group",
+      "asn": "AS26347",
+      "supports_doh": false,
+      "supports_dot": false,
+      "supports_doq": false,
+      "dnssec_validation": false,
+      "logging_policy": "Query logs retained for security analysis",
+      "anycast": false,
+      "notes": "Blocks malware and phishing domains. No DNS-over-HTTPS support. Anycast limited."
+    },
+    {
+      "name": "Neustar UltraDNS (formerly Verisign Public DNS)",
+      "ips": ["64.6.64.6", "64.6.65.6"],
+      "ipv6": ["2620:74:1b::1:1", "2620:74:1c::2:2"],
+      "provider": "TransUnion (formerly Neustar, formerly Verisign)",
+      "asn": "AS7342",
+      "supports_doh": false,
+      "supports_dot": false,
+      "supports_doq": false,
+      "dnssec_validation": true,
+      "logging_policy": "Queries logged for security purposes",
+      "anycast": true,
+      "notes": "Previously marketed as Verisign Public DNS. Stable, DNSSEC-validating. Threat-protection variant: 156.154.70.2 / 156.154.71.2"
+    },
+    {
+      "name": "Yandex DNS (Basic)",
+      "ips": ["77.88.8.8", "77.88.8.1"],
+      "ipv6": ["2a02:6b8::feed:0ff", "2a02:6b8:0:1::feed:0ff"],
+      "provider": "Yandex LLC",
+      "asn": "AS13238",
+      "supports_doh": false,
+      "supports_dot": false,
+      "supports_doq": false,
+      "dnssec_validation": false,
+      "logging_policy": "Queries logged per Yandex privacy policy",
+      "anycast": true,
+      "notes": "Russian provider. Not recommended for privacy-sensitive environments. Safe variant (malware/adult blocking): 77.88.8.88 / 77.88.8.2"
+    },
+    {
+      "name": "Yandex DNS (Safe — malware blocking)",
+      "ips": ["77.88.8.88", "77.88.8.2"],
+      "provider": "Yandex LLC",
+      "asn": "AS13238",
+      "supports_doh": false,
+      "supports_dot": false,
+      "supports_doq": false,
+      "dnssec_validation": false,
+      "logging_policy": "Queries logged per Yandex privacy policy",
+      "anycast": true,
+      "notes": "Blocks malware domains. Russian jurisdiction — not recommended for use in sensitive Western networks."
+    },
+    {
+      "name": "DNS.WATCH",
+      "ips": ["84.200.69.80", "84.200.70.40"],
+      "ipv6": ["2001:1608:10:25::1c04:b12f", "2001:1608:10:25::9249:d69b"],
+      "provider": "DNS.WATCH (Germany)",
+      "asn": "AS25273",
+      "supports_doh": false,
+      "supports_dot": false,
+      "supports_doq": false,
+      "dnssec_validation": true,
+      "logging_policy": "No logging",
+      "anycast": false,
+      "notes": "Uncensored, no-log DNS from Germany. DNSSEC validating. Small provider with limited redundancy."
+    },
+    {
+      "name": "Level3/CenturyLink (Lumen) Public DNS",
+      "ips": ["4.2.2.1", "4.2.2.2", "4.2.2.3", "4.2.2.4", "4.2.2.5", "4.2.2.6"],
+      "provider": "Lumen Technologies (formerly Level3/CenturyLink)",
+      "asn": "AS3356",
+      "supports_doh": false,
+      "supports_dot": false,
+      "supports_doq": false,
+      "dnssec_validation": false,
+      "logging_policy": "Unknown",
+      "anycast": true,
+      "notes": "Long-established public resolver on 4.2.2.x range. Not officially documented as a public service but widely used. Operated on backbone infrastructure."
+    },
+    {
+      "name": "FreeDNS (Freie Nameserver)",
+      "ips": ["37.235.1.174", "37.235.1.177"],
+      "provider": "FreeDNS (Austria)",
+      "asn": "AS50098",
+      "supports_doh": false,
+      "supports_dot": false,
+      "supports_doq": false,
+      "dnssec_validation": false,
+      "logging_policy": "No logging claimed",
+      "anycast": false,
+      "notes": "Small Austrian free DNS provider. Limited redundancy."
+    },
+    {
+      "name": "Hurricane Electric Free DNS",
+      "ips": ["74.82.42.42"],
+      "ipv6": ["2001:470:20::2"],
+      "provider": "Hurricane Electric LLC",
+      "asn": "AS6939",
+      "supports_doh": false,
+      "supports_dot": false,
+      "supports_doq": false,
+      "dnssec_validation": true,
+      "logging_policy": "Unknown",
+      "anycast": false,
+      "notes": "DNSSEC-validating. Hurricane Electric is a major Internet backbone provider."
+    },
+    {
+      "name": "Cisco Umbrella (Enterprise)",
+      "ips": ["208.67.222.222", "208.67.220.220"],
+      "provider": "Cisco Systems (Umbrella)",
+      "asn": "AS36692",
+      "supports_doh": true,
+      "doh_url": "https://doh.umbrella.com/dns-query",
+      "supports_dot": false,
+      "supports_doq": false,
+      "dnssec_validation": true,
+      "logging_policy": "Full query logging for enterprise security analytics",
+      "anycast": true,
+      "notes": "Enterprise variant of OpenDNS. Requires Umbrella subscription for full threat blocking. Shares IPs with OpenDNS consumer product."
+    }
+  ],
+
+  "known_malicious_dns": {
+    "_comment": "DNS infrastructure attributed to APT28 (GRU Unit 26165) FrostArmada campaign. Sources: CISA AA24-038A, FBI/CISA/NSA/NCSC AA26-097A, Spamhaus, Shadowserver. IPs in these ranges redirecting DNS should be treated as indicators of compromise on monitored networks.",
+    "apt28_frostarmada": [
+      "5.226.137.0/24",
+      "37.221.64.0/24",
+      "77.83.197.0/24",
+      "79.141.161.0/24",
+      "185.237.166.0/24",
+      "64.44.154.0/24",
+      "79.141.173.0/24",
+      "103.140.186.0/24",
+      "185.234.73.0/24"
+    ],
+    "apt28_dying_ember": [
+      "45.83.66.0/24",
+      "185.220.101.0/24",
+      "176.9.0.0/24",
+      "5.161.0.0/16"
+    ],
+    "specific_ips": [
+      {
+        "ip": "64.120.31.96",
+        "first_seen": "2025-05",
+        "last_seen": "2026-02",
+        "campaign": "FrostArmada",
+        "asn": "AS32748",
+        "hosting": "Steadfast Networks (US)",
+        "role": "Rogue DNS resolver — redirects banking and government domains to phishing infrastructure",
+        "confidence": "high"
+      },
+      {
+        "ip": "79.141.160.78",
+        "first_seen": "2025-08",
+        "last_seen": "2026-03",
+        "campaign": "FrostArmada",
+        "asn": "AS48516",
+        "hosting": "Hosting provider, Netherlands",
+        "role": "Rogue DNS resolver — used for credential harvesting via DNS hijack on compromised TP-Link/MikroTik routers",
+        "confidence": "high"
+      },
+      {
+        "ip": "185.234.73.11",
+        "first_seen": "2025-09",
+        "last_seen": "2026-01",
+        "campaign": "FrostArmada",
+        "asn": "AS215570",
+        "hosting": "Bulletproof hosting, offshore",
+        "role": "Secondary rogue DNS — failover resolver in FrostArmada botnet architecture",
+        "confidence": "high"
+      },
+      {
+        "ip": "77.83.197.5",
+        "first_seen": "2025-06",
+        "last_seen": "2026-02",
+        "campaign": "FrostArmada",
+        "asn": "AS210079",
+        "hosting": "Eastern European hosting provider",
+        "role": "Primary rogue DNS resolver — observed in PCAP captures from compromised EdgeRouter X nodes",
+        "confidence": "high"
+      },
+      {
+        "ip": "37.221.64.14",
+        "first_seen": "2024-11",
+        "last_seen": "2025-12",
+        "campaign": "FrostArmada / pre-FrostArmada APT28 ops",
+        "asn": "AS60781",
+        "hosting": "LeaseWeb Netherlands",
+        "role": "DNS-over-TLS rogue resolver — evades standard DNS monitoring by using DoT port 853",
+        "confidence": "medium"
+      },
+      {
+        "ip": "103.140.186.42",
+        "first_seen": "2025-10",
+        "last_seen": "2026-03",
+        "campaign": "FrostArmada",
+        "asn": "AS63949",
+        "hosting": "Akamai/Linode, APAC region",
+        "role": "Rogue DNS — specifically used in Ukrainian ISP targeting phase of FrostArmada",
+        "confidence": "high"
+      }
+    ]
+  },
+
+  "isp_common_dns": {
+    "_comment": "Common ISP DNS servers that are legitimate but not in the well-known public resolver list. Presence of these as a device's configured DNS is normal and expected for devices on those ISP networks. Unexpected presence on a network not associated with that ISP could indicate misconfiguration or compromise.",
+    "ranges": [
+      {
+        "cidr": "75.75.75.0/24",
+        "provider": "Comcast/Xfinity",
+        "asn": "AS7922",
+        "specific_ips": ["75.75.75.75", "75.75.76.76"],
+        "notes": "Primary Comcast recursive DNS. Normal for Comcast residential customers."
+      },
+      {
+        "cidr": "71.252.0.0/16",
+        "provider": "Comcast/Xfinity",
+        "asn": "AS7922",
+        "notes": "Comcast DNS secondary range."
+      },
+      {
+        "cidr": "209.18.47.0/24",
+        "provider": "Cox Communications",
+        "asn": "AS22773",
+        "specific_ips": ["209.18.47.61", "209.18.47.62"],
+        "notes": "Cox residential DNS servers."
+      },
+      {
+        "cidr": "68.105.28.0/24",
+        "provider": "Cox Communications",
+        "asn": "AS22773",
+        "specific_ips": ["68.105.28.11", "68.105.29.11"],
+        "notes": "Cox secondary DNS range."
+      },
+      {
+        "cidr": "205.171.3.0/24",
+        "provider": "CenturyLink/Lumen (Quantum Fiber)",
+        "asn": "AS209",
+        "specific_ips": ["205.171.3.65", "205.171.3.25"],
+        "notes": "CenturyLink/Lumen residential DNS."
+      },
+      {
+        "cidr": "209.225.0.0/16",
+        "provider": "Spectrum/Charter Communications",
+        "asn": "AS20115",
+        "notes": "Charter/Spectrum DNS range (legacy Time Warner Cable infrastructure)."
+      },
+      {
+        "cidr": "24.29.0.0/16",
+        "provider": "Spectrum/Charter Communications",
+        "asn": "AS20115",
+        "specific_ips": ["24.29.131.51", "24.29.131.52"],
+        "notes": "Spectrum/Charter DNS secondary range."
+      },
+      {
+        "cidr": "4.2.2.0/24",
+        "provider": "Level3/Lumen Technologies",
+        "asn": "AS3356",
+        "specific_ips": ["4.2.2.1", "4.2.2.2", "4.2.2.3", "4.2.2.4"],
+        "notes": "Widely used Level3 anycast DNS. Often set manually by users."
+      },
+      {
+        "cidr": "64.71.255.0/24",
+        "provider": "Verizon FiOS",
+        "asn": "AS701",
+        "specific_ips": ["64.71.255.204", "64.71.255.205"],
+        "notes": "Verizon FiOS (East Coast) DNS servers."
+      },
+      {
+        "cidr": "71.242.0.0/16",
+        "provider": "Verizon FiOS",
+        "asn": "AS701",
+        "notes": "Verizon FiOS secondary DNS range."
+      },
+      {
+        "cidr": "68.94.156.0/24",
+        "provider": "AT&T U-verse / AT&T Fiber",
+        "asn": "AS7018",
+        "specific_ips": ["68.94.156.1", "68.94.157.1"],
+        "notes": "AT&T broadband primary DNS. Normal for AT&T residential customers."
+      },
+      {
+        "cidr": "12.127.16.0/24",
+        "provider": "AT&T Business",
+        "asn": "AS7018",
+        "notes": "AT&T Business DNS infrastructure."
+      },
+      {
+        "cidr": "208.180.96.0/24",
+        "provider": "WINDSTREAM / Kinetic",
+        "asn": "AS6167",
+        "notes": "Windstream/Kinetic broadband DNS."
+      },
+      {
+        "cidr": "199.45.32.0/24",
+        "provider": "Mediacom",
+        "asn": "AS30036",
+        "specific_ips": ["199.45.32.37", "199.45.32.38"],
+        "notes": "Mediacom cable DNS servers."
+      },
+      {
+        "cidr": "167.206.0.0/16",
+        "provider": "Frontier Communications",
+        "asn": "AS5650",
+        "specific_ips": ["167.206.0.1", "167.206.0.2"],
+        "notes": "Frontier broadband DNS."
+      },
+      {
+        "cidr": "63.240.60.0/24",
+        "provider": "EarthLink",
+        "asn": "AS6290",
+        "notes": "EarthLink legacy ISP DNS. Rarely seen on modern networks."
+      },
+      {
+        "cidr": "69.252.80.0/24",
+        "provider": "Rogers Communications",
+        "asn": "AS812",
+        "specific_ips": ["69.252.80.1", "69.252.80.2"],
+        "notes": "Rogers Cable Canada DNS servers."
+      },
+      {
+        "cidr": "23.135.224.0/24",
+        "provider": "Bell Canada",
+        "asn": "AS577",
+        "notes": "Bell Canada residential DNS."
+      },
+      {
+        "cidr": "62.2.17.0/24",
+        "provider": "BT (British Telecom)",
+        "asn": "AS2856",
+        "specific_ips": ["62.2.17.245", "62.2.17.246"],
+        "notes": "BT UK broadband DNS servers."
+      },
+      {
+        "cidr": "212.58.224.0/24",
+        "provider": "BT (British Telecom)",
+        "asn": "AS2856",
+        "notes": "BT secondary DNS range."
+      },
+      {
+        "cidr": "194.168.4.0/24",
+        "provider": "Sky Broadband (UK)",
+        "asn": "AS5607",
+        "specific_ips": ["194.168.4.100", "194.168.8.100"],
+        "notes": "Sky UK broadband DNS servers."
+      },
+      {
+        "cidr": "81.254.172.0/24",
+        "provider": "Orange France (France Telecom)",
+        "asn": "AS5410",
+        "notes": "Orange France broadband DNS range."
+      },
+      {
+        "cidr": "195.0.0.0/24",
+        "provider": "Deutsche Telekom (T-Online)",
+        "asn": "AS3320",
+        "specific_ips": ["195.0.0.1", "195.0.0.2"],
+        "notes": "Deutsche Telekom Germany broadband DNS."
+      }
+    ]
+  }
+}

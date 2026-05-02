@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GATEKEEP — Home network security dashboard. Detect APT28 router compromise.">
+  <title>GATEKEEP — Network Security Dashboard</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+
+  <!-- Favicon (inline SVG data URI) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡</text></svg>">
+</head>
+<body>
+
+  <!-- ================================================================== -->
+  <!-- HEADER                                                              -->
+  <!-- ================================================================== -->
+  <header class="header" id="app-header">
+    <div class="header__brand">
+      <div class="header__logo">
+        <svg class="header__logo-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" fill="url(#shieldGrad)" stroke="var(--accent-blue)" stroke-width="1.5"/>
+          <path d="M12 16l3 3 5-6" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="shieldGrad" x1="16" y1="2" x2="16" y2="26" gradientUnits="userSpaceOnUse">
+              <stop stop-color="rgba(59,130,246,0.15)"/>
+              <stop offset="1" stop-color="rgba(16,185,129,0.05)"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="header__title-group">
+          <h1 class="header__title">GATE<span class="header__title-accent">KEEP</span></h1>
+          <span class="header__subtitle">Network Security</span>
+        </div>
+      </div>
+
+      <div class="header__status-bar">
+        <div class="header__status-item" id="status-privilege" title="Privilege Level">
+          <span class="status-dot status-dot--neutral"></span>
+          <span class="header__status-label">Privileges</span>
+          <span class="header__status-value" id="privilege-level">--</span>
+        </div>
+        <div class="header__status-item" id="status-npcap" title="Npcap Status">
+          <span class="status-dot status-dot--neutral"></span>
+          <span class="header__status-label">Npcap</span>
+          <span class="header__status-value" id="npcap-status">--</span>
+        </div>
+        <div class="header__status-item" id="status-db" title="Database Status">
+          <span class="status-dot status-dot--neutral"></span>
+          <span class="header__status-label">Database</span>
+          <span class="header__status-value" id="db-status">--</span>
+        </div>
+        <div class="header__status-item" id="status-ai" title="AI Configuration">
+          <span class="status-dot status-dot--neutral"></span>
+          <span class="header__status-label">AI</span>
+          <span class="header__status-value" id="ai-status">--</span>
+        </div>
+        <div class="header__status-item" id="status-ws" title="WebSocket Connection">
+          <span class="status-dot status-dot--neutral" id="ws-dot"></span>
+          <span class="header__status-label">Live</span>
+          <span class="header__status-value" id="ws-status">--</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-ghost header__settings-btn" id="btn-settings" title="Settings" aria-label="Open settings">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.32 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ================================================================== -->
+  <!-- NAVIGATION TABS                                                     -->
+  <!-- ================================================================== -->
+  <nav class="nav-tabs" id="nav-tabs" role="tablist">
+    <button class="tab tab--active" data-tab="scan" role="tab" aria-selected="true" aria-controls="tab-scan">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <span>Scan</span>
+      <span class="tab__badge tab__badge--phase">Phase 1</span>
+    </button>
+    <button class="tab" data-tab="monitor" role="tab" aria-selected="false" aria-controls="tab-monitor">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+      </svg>
+      <span>Monitor</span>
+      <span class="tab__badge tab__badge--phase">Phase 2</span>
+    </button>
+    <button class="tab" data-tab="harden" role="tab" aria-selected="false" aria-controls="tab-harden">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <span>Harden</span>
+      <span class="tab__badge tab__badge--phase">Phase 3</span>
+    </button>
+  </nav>
+
+  <!-- ================================================================== -->
+  <!-- MAIN CONTENT AREA                                                   -->
+  <!-- ================================================================== -->
+  <main class="main" id="main-content">
+
+    <!-- ============================================================== -->
+    <!-- SCAN TAB                                                        -->
+    <!-- ============================================================== -->
+    <section class="tab-content tab-content--active" id="tab-scan" role="tabpanel" aria-labelledby="tab-scan-btn">
+
+      <!-- Scan Controls -->
+      <div class="scan-controls" id="scan-controls">
+        <div class="scan-controls__config">
+          <div class="form-group">
+            <label class="form-label" for="scan-type">Scan Type</label>
+            <div class="select-wrapper">
+              <select class="form-select" id="scan-type">
+                <option value="full_scan">Full Scan</option>
+                <option value="quick">Quick Scan</option>
+                <option value="arp_discovery">ARP Discovery Only</option>
+                <option value="port_scan">Port Scan</option>
+                <option value="dns_check">DNS Check</option>
+                <option value="router_fingerprint">Router Fingerprint</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="scan-interface">Network Interface</label>
+            <div class="select-wrapper">
+              <select class="form-select" id="scan-interface">
+                <option value="">Auto-detect</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="scan-subnet">Subnet (optional)</label>
+            <input class="form-input form-input--mono" type="text" id="scan-subnet" placeholder="e.g. 192.168.1.0/24" autocomplete="off" spellcheck="false">
+          </div>
+        </div>
+
+        <button class="btn-scan" id="btn-scan" type="button">
+          <span class="btn-scan__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="12" r="6"/>
+              <circle cx="12" cy="12" r="2"/>
+              <line x1="12" y1="2" x2="12" y2="6"/>
+              <line x1="12" y1="18" x2="12" y2="22"/>
+              <line x1="2" y1="12" x2="6" y2="12"/>
+              <line x1="18" y1="12" x2="22" y2="12"/>
+            </svg>
+          </span>
+          <span class="btn-scan__label">SCAN NETWORK</span>
+          <span class="btn-scan__sublabel">Detect threats on your local network</span>
+          <div class="btn-scan__ripple" aria-hidden="true"></div>
+          <div class="btn-scan__radar" aria-hidden="true"></div>
+        </button>
+      </div>
+
+      <!-- Scan Progress (hidden until scan starts) -->
+      <div class="scan-progress hidden" id="scan-progress">
+        <div class="scan-progress__header">
+          <h3 class="scan-progress__title">Scanning Network</h3>
+          <span class="scan-progress__device-count" id="device-count-live">
+            <span class="scan-progress__count-num" id="live-device-num">0</span> devices found
+          </span>
+        </div>
+        <div class="scan-progress__bar-track">
+          <div class="scan-progress__bar-fill" id="progress-bar-fill"></div>
+          <div class="scan-progress__bar-glow" id="progress-bar-glow"></div>
+        </div>
+        <div class="scan-progress__phases" id="scan-phases">
+          <div class="phase-indicator" data-phase="arp_discovery">
+            <div class="phase-indicator__icon">
+              <svg class="phase-indicator__check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div class="phase-indicator__spinner"></div>
+              <div class="phase-indicator__dot"></div>
+            </div>
+            <span class="phase-indicator__label">ARP Discovery</span>
+          </div>
+          <div class="phase-indicator" data-phase="dns_check">
+            <div class="phase-indicator__icon">
+              <svg class="phase-indicator__check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div class="phase-indicator__spinner"></div>
+              <div class="phase-indicator__dot"></div>
+            </div>
+            <span class="phase-indicator__label">DNS Check</span>
+          </div>
+          <div class="phase-indicator" data-phase="port_scan">
+            <div class="phase-indicator__icon">
+              <svg class="phase-indicator__check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div class="phase-indicator__spinner"></div>
+              <div class="phase-indicator__dot"></div>
+            </div>
+            <span class="phase-indicator__label">Port Scan</span>
+          </div>
+          <div class="phase-indicator" data-phase="router_fingerprint">
+            <div class="phase-indicator__icon">
+              <svg class="phase-indicator__check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div class="phase-indicator__spinner"></div>
+              <div class="phase-indicator__dot"></div>
+            </div>
+            <span class="phase-indicator__label">Fingerprint</span>
+          </div>
+          <div class="phase-indicator" data-phase="ai_analysis">
+            <div class="phase-indicator__icon">
+              <svg class="phase-indicator__check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div class="phase-indicator__spinner"></div>
+              <div class="phase-indicator__dot"></div>
+            </div>
+            <span class="phase-indicator__label">AI Analysis</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scan Results (hidden until scan completes) -->
+      <div class="scan-results hidden" id="scan-results">
+
+        <!-- Risk Level Badge -->
+        <div class="risk-gauge" id="risk-gauge">
+          <div class="risk-gauge__ring">
+            <svg class="risk-gauge__svg" viewBox="0 0 120 120">
+              <circle class="risk-gauge__track" cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="8"/>
+              <circle class="risk-gauge__fill" cx="60" cy="60" r="52" fill="none" stroke="var(--accent-green)" stroke-width="8" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327" transform="rotate(-90 60 60)"/>
+            </svg>
+            <div class="risk-gauge__center">
+              <span class="risk-gauge__score" id="risk-score">--</span>
+              <span class="risk-gauge__label" id="risk-label">PENDING</span>
+            </div>
+          </div>
+          <div class="risk-gauge__summary" id="risk-summary"></div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row" id="stats-row">
+          <div class="stat-card">
+            <span class="stat-card__value" id="stat-devices">0</span>
+            <span class="stat-card__label">Devices</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__value" id="stat-ports">0</span>
+            <span class="stat-card__label">Open Ports</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__value" id="stat-alerts">0</span>
+            <span class="stat-card__label">Alerts</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__value" id="stat-duration">--</span>
+            <span class="stat-card__label">Duration</span>
+          </div>
+        </div>
+
+        <!-- Network Map -->
+        <div class="card" id="network-map-card">
+          <div class="card__header">
+            <h3 class="card__title">Network Topology</h3>
+          </div>
+          <div class="card__body" id="network-map-container">
+            <!-- Rendered by network-map.js -->
+          </div>
+        </div>
+
+        <!-- AI Analysis Panel -->
+        <div class="card" id="ai-analysis-card">
+          <div class="card__header">
+            <h3 class="card__title">AI Security Analysis</h3>
+            <div class="card__actions">
+              <button class="btn btn-ghost btn--sm" id="btn-reanalyze" title="Re-run AI analysis">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                </svg>
+                Re-analyze
+              </button>
+            </div>
+          </div>
+          <div class="card__body" id="ai-analysis-content">
+            <div class="empty-state">
+              <p>AI analysis will appear here after scan completion.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Device Grid -->
+        <div class="card" id="device-grid-card">
+          <div class="card__header">
+            <h3 class="card__title">Discovered Devices</h3>
+            <div class="card__actions">
+              <div class="device-grid__filters">
+                <select class="form-select form-select--sm" id="device-sort">
+                  <option value="ip">Sort: IP Address</option>
+                  <option value="vendor">Sort: Vendor</option>
+                  <option value="type">Sort: Type</option>
+                  <option value="ports">Sort: Port Count</option>
+                </select>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="filter-suspicious"> Suspicious only
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="card__body">
+            <div class="device-grid" id="device-grid">
+              <div class="empty-state" id="device-grid-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+                <p>No devices found — run a scan</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DNS Status Panel -->
+        <div class="card" id="dns-status-card">
+          <div class="card__header">
+            <h3 class="card__title">DNS Integrity</h3>
+            <div class="card__actions">
+              <button class="btn btn-ghost btn--sm" id="btn-dns-check" title="Run standalone DNS check">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                </svg>
+                Check DNS
+              </button>
+            </div>
+          </div>
+          <div class="card__body" id="dns-status-content">
+            <div class="empty-state">
+              <p>DNS status will appear after scanning.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Router Info Panel -->
+        <div class="card" id="router-info-card">
+          <div class="card__header">
+            <h3 class="card__title">Router Analysis</h3>
+          </div>
+          <div class="card__body" id="router-info-content">
+            <div class="empty-state">
+              <p>Router information will appear after scanning.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scan History -->
+        <div class="card" id="scan-history-card">
+          <div class="card__header">
+            <h3 class="card__title">Scan History</h3>
+            <button class="btn btn-ghost btn--sm" id="btn-toggle-history" aria-expanded="false">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+          </div>
+          <div class="card__body card__body--collapsible collapsed" id="scan-history-content">
+            <div class="scan-history-list" id="scan-history-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- MONITOR TAB (placeholder)                                       -->
+    <!-- ============================================================== -->
+    <section class="tab-content" id="tab-monitor" role="tabpanel" aria-labelledby="tab-monitor-btn">
+      <div class="placeholder-panel">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+        <h2>Real-Time Monitor</h2>
+        <p>Live packet capture, anomaly detection, and threat monitoring. Coming in Phase 2.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- HARDEN TAB (placeholder)                                        -->
+    <!-- ============================================================== -->
+    <section class="tab-content" id="tab-harden" role="tabpanel" aria-labelledby="tab-harden-btn">
+      <div class="placeholder-panel">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <h2>Network Hardening</h2>
+        <p>Firewall rules, baseline management, and security recommendations. Coming in Phase 3.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================================================================== -->
+  <!-- FOOTER                                                              -->
+  <!-- ================================================================== -->
+  <footer class="footer">
+    <span class="footer__privacy">Local-first. No telemetry. Your network, your data.</span>
+    <span class="footer__version" id="app-version">GATEKEEP v--</span>
+  </footer>
+
+  <!-- ================================================================== -->
+  <!-- SETTINGS MODAL                                                      -->
+  <!-- ================================================================== -->
+  <div class="modal-overlay hidden" id="settings-modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal__header">
+        <h2 class="modal__title" id="settings-title">Settings</h2>
+        <button class="btn btn-ghost modal__close" id="btn-close-settings" aria-label="Close settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal__body">
+        <div class="settings-status">
+          <div class="settings-status__row">
+            <span class="settings-status__label">AI Analysis</span>
+            <span class="settings-status__value" id="settings-ai-status">Checking...</span>
+          </div>
+          <div class="settings-status__row">
+            <span class="settings-status__label">Database</span>
+            <span class="settings-status__value" id="settings-db-status">--</span>
+          </div>
+          <div class="settings-status__row">
+            <span class="settings-status__label">Npcap</span>
+            <span class="settings-status__value" id="settings-npcap-status">--</span>
+          </div>
+          <div class="settings-status__row">
+            <span class="settings-status__label">Version</span>
+            <span class="settings-status__value" id="settings-version">--</span>
+          </div>
+          <p class="form-hint" style="margin-top: 1rem;">AI analysis is powered by the Claude Agent SDK and authenticates automatically via Claude Code. No API key configuration is needed.</p>
+        </div>
+        <div class="modal__actions">
+          <button class="btn btn-secondary" id="btn-check-status">Refresh Status</button>
+        </div>
+        <div class="modal__feedback hidden" id="settings-feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================== -->
+  <!-- TOAST CONTAINER                                                     -->
+  <!-- ================================================================== -->
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-relevant="additions"></div>
+
+  <!-- ================================================================== -->
+  <!-- SCRIPTS                                                             -->
+  <!-- ================================================================== -->
+  <!-- Utilities (must load first) -->
+  <script src="/static/js/utils/formatters.js"></script>
+  <script src="/static/js/api.js"></script>
+
+  <!-- WebSocket client (shared by all phases) -->
+  <script src="/static/js/websocket.js"></script>
+
+  <!-- Phase 1: Scan components -->
+  <script src="/static/js/components/network-map.js"></script>
+  <script src="/static/js/components/device-grid.js"></script>
+  <script src="/static/js/components/scan-controls.js"></script>
+
+  <!-- Phase 2: Monitor components -->
+  <script src="/static/js/components/alert-feed.js"></script>
+  <script src="/static/js/components/monitor-panel.js"></script>
+
+  <!-- Phase 3: Hardening components -->
+  <script src="/static/js/components/hardening-panel.js"></script>
+
+  <!-- Main application (must load last) -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

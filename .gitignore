@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+
+# Database
+data/gatekeep.db
+data/gatekeep.db-wal
+data/gatekeep.db-shm
+
+# Logs
+logs/*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+nul
+
+# Environment / secrets
+.env
+*.pem
+*.key
+
+# Node (just in case)
+node_modules/
+
+# Claude Code / AI tooling
+.omc/
+.claude/
+CLAUDE.md
+AGENTS.md

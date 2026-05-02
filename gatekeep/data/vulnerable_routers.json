@@ -1,0 +1,562 @@
+[
+  {
+    "_comment": "Source: FBI/CISA/NSA/NCSC joint advisory AA26-097A (April 2026) — Operation Masquerade / FrostArmada; CISA advisory AA24-038A (Feb 2024) — Operation Dying Ember / Moobot. Threat actor: APT28 (GRU Unit 26165 / Fancy Bear).",
+    "manufacturer": "TP-Link",
+    "model": "TL-WR841N",
+    "cves": ["CVE-2023-50224", "CVE-2022-46143"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated HTTP GET to /tmp/dropbear/dropbearpwd retrieves stored plaintext credentials; second crafted POST to /userRpm/WanDynamicIpV6CfgRpm.htm modifies DNS server settings to APT28-controlled resolvers for DNS hijacking",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to 220905 (Sept 2022 patch); TL-WR841N v14 and earlier confirmed exploited",
+    "remediation": "Update firmware to latest available release, change all default credentials, disable WAN-side remote management (TCP 80/443), segment IoT/router admin interface from LAN, verify DNS settings have not been modified",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-WR841N", "TP-LINK Wireless N Router WR841N"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm", "/userRpm/StatusRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "TL-WR840N",
+    "cves": ["CVE-2023-50224"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated credential extraction from /tmp/dropbear/dropbearpwd followed by DNS hijack via crafted HTTP request to router management interface",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to security patch; v2 and v3 hardware confirmed vulnerable",
+    "remediation": "Update firmware, change default credentials, disable remote WAN management",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-WR840N", "TP-LINK Wireless N Router WR840N"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "TL-WR842N",
+    "cves": ["CVE-2023-50224"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated credential extraction followed by DNS hijack via crafted HTTP request",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to security patch; v5 hardware confirmed vulnerable",
+    "remediation": "Update firmware, change default credentials, disable remote WAN management",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-WR842N", "TP-LINK Wireless N Router WR842N"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "TL-WR845N",
+    "cves": ["CVE-2023-50224"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated credential extraction followed by DNS hijack via crafted HTTP request",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to security patch",
+    "remediation": "Update firmware, change default credentials, disable remote WAN management",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-WR845N", "TP-LINK Wireless N Router WR845N"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "TL-WR945N",
+    "cves": ["CVE-2023-50224"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated credential extraction followed by DNS hijack via crafted HTTP request",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to security patch; v1 hardware confirmed vulnerable",
+    "remediation": "Update firmware, change default credentials, disable remote WAN management",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-WR945N", "TP-LINK Wireless N Router"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "TL-WDR3500",
+    "cves": ["CVE-2023-50224"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated credential extraction from /tmp/dropbear/dropbearpwd followed by DNS server modification",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to security patch; dual-band N300 platform affected",
+    "remediation": "Update firmware, change default credentials, disable remote WAN management",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-WDR3500", "TP-LINK Wireless Dual Band Router WDR3500"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "TL-WDR3600",
+    "cves": ["CVE-2023-50224"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated credential extraction followed by DNS hijack",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to security patch; dual-band N600 platform affected",
+    "remediation": "Update firmware, change default credentials, disable remote WAN management",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-WDR3600", "TP-LINK Wireless Dual Band Router WDR3600"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "TL-WDR4300",
+    "cves": ["CVE-2023-50224"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated credential extraction followed by DNS hijack",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to security patch; dual-band N750 platform, v1 hardware confirmed",
+    "remediation": "Update firmware, change default credentials, disable remote WAN management",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-WDR4300", "TP-LINK Wireless N Gigabit Router WDR4300"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "Archer C5",
+    "cves": ["CVE-2023-50224", "CVE-2021-41753"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80/8080 — unauthenticated credential extraction; additionally CVE-2021-41753 allows command injection via the ping diagnostic feature (requires authentication but default creds trivially obtained)",
+    "severity": "critical",
+    "affected_firmware": "v2 hardware, all firmware prior to 150427; AC1200 dual-band Archer platform",
+    "remediation": "Update firmware to latest available, change default credentials, disable remote WAN management, restrict diagnostic functions",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["Archer C5", "TP-LINK Archer C5"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/webpages/login.html", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443, 8080]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "Archer C7",
+    "cves": ["CVE-2023-50224", "CVE-2021-41753", "CVE-2020-9374"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Multiple vectors: (1) CVE-2023-50224 auth bypass + credential extraction on TCP 80; (2) CVE-2020-9374 unauthenticated remote code execution via crafted request to tdpServer on UDP 20002 (TP-Link Device Protocol); (3) CVE-2021-41753 command injection post-auth in diagnostic functions",
+    "severity": "critical",
+    "affected_firmware": "v2/v4/v5 hardware; AC1750 dual-band; all firmware prior to 200904 for v5",
+    "remediation": "Update firmware to latest available, change default credentials, disable remote WAN management, block UDP 20002 externally",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["Archer C7", "TP-LINK Archer C7"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/webpages/login.html", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443, 8080],
+      "open_udp_ports": [20002]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "TL-MR6400",
+    "cves": ["CVE-2023-50224"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated credential extraction followed by DNS hijack; LTE/4G router with WAN-side management typically enabled by default",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to security patch; 4G LTE router, v4/v5 hardware",
+    "remediation": "Update firmware, change default credentials, disable remote WAN/LTE management interface, restrict admin access to LAN only",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-MR6400", "TP-LINK LTE Router MR6400"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "TL-MR3420",
+    "cves": ["CVE-2023-50224"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated credential extraction followed by DNS hijack; 3G/4G USB modem router",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to security patch; v5 hardware confirmed vulnerable",
+    "remediation": "Update firmware, change default credentials, disable remote WAN management",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-MR3420", "TP-LINK 3G/4G Router MR3420"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "TL-WA801ND",
+    "cves": ["CVE-2023-50224"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated credential extraction; wireless access point used as pivot point after compromise for lateral movement onto wired LAN segments",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to security patch; v5 hardware, 300Mbps wireless N access point",
+    "remediation": "Update firmware, change default credentials, restrict management VLAN access",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-WA801ND", "TP-LINK Wireless N Access Point WA801ND"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "TP-Link",
+    "model": "TL-WA901ND",
+    "cves": ["CVE-2023-50224"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Authentication bypass in TP-Link HTTPD on TCP 80 — unauthenticated credential extraction; wireless N450 access point used as pivot point",
+    "severity": "critical",
+    "affected_firmware": "All versions prior to security patch; v5/v6 hardware confirmed",
+    "remediation": "Update firmware, change default credentials, restrict management VLAN access",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["TL-WA901ND", "TP-LINK Wireless N Access Point WA901ND"],
+      "http_headers": {
+        "Server": "TP-LINK HTTPD/1.0"
+      },
+      "default_admin_paths": ["/", "/userRpm/LoginRpm.htm"],
+      "default_credentials": {"username": "admin", "password": "admin"},
+      "open_ports": [80, 443]
+    }
+  },
+  {
+    "manufacturer": "Ubiquiti",
+    "model": "EdgeRouter X",
+    "cves": ["CVE-2023-31998", "CVE-2021-22909"],
+    "campaign": "Operation Dying Ember / Moobot Botnet",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear) — used Moobot botnet as pre-compromised infrastructure for credential harvesting and spearphishing operations",
+    "attack_vector": "CVE-2023-31998: heap-based buffer overflow in EdgeOS multicast daemon (UDP) allows unauthenticated RCE as root. CVE-2021-22909: command injection via crafted upgrade URL in EdgeOS firmware update mechanism. Post-compromise: APT28 installs OpenSSH backdoor, exfiltrates NTLM hashes and browser credentials, establishes Moobot C2 tunnel via non-standard SSH port",
+    "severity": "critical",
+    "affected_firmware": "EdgeOS v2.0.9 and below (CVE-2023-31998 patched in v2.0.9-hotfix.4); all v1.x and v2.x before patch",
+    "remediation": "Upgrade EdgeOS to v2.0.9-hotfix.4 or later; change all default credentials (default is ubnt/ubnt); disable WAN-side SSH (TCP 22) and HTTP (TCP 80); enable firewall rules blocking management access from WAN; check /etc/cron.d/ and /etc/rc.local for persistence mechanisms; audit authorized_keys in /home/ubnt/.ssh/",
+    "advisory_url": "https://www.cisa.gov/news-events/cybersecurity-advisories/aa24-038a",
+    "fingerprint_patterns": {
+      "http_title": ["EdgeOS", "Ubiquiti EdgeRouter", "EdgeRouter X"],
+      "http_headers": {
+        "Server": "lighttpd",
+        "X-Frame-Options": "SAMEORIGIN"
+      },
+      "default_admin_paths": ["/", "/api/edge/auth.json"],
+      "default_credentials": {"username": "ubnt", "password": "ubnt"},
+      "open_ports": [22, 80, 443],
+      "ssh_banner_patterns": ["SSH-2.0-OpenSSH", "EdgeOS"]
+    }
+  },
+  {
+    "manufacturer": "Ubiquiti",
+    "model": "EdgeRouter Lite",
+    "cves": ["CVE-2023-31998", "CVE-2021-22909"],
+    "campaign": "Operation Dying Ember / Moobot Botnet",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Same as EdgeRouter X: heap overflow in multicast daemon (CVE-2023-31998) for unauthenticated RCE; post-compromise credential harvesting and Moobot C2 tunneling",
+    "severity": "critical",
+    "affected_firmware": "EdgeOS v2.0.9 and below; EdgeRouter Lite runs identical EdgeOS firmware",
+    "remediation": "Upgrade EdgeOS, change default ubnt/ubnt credentials, disable WAN-side management, audit for IOCs listed in CISA AA24-038A",
+    "advisory_url": "https://www.cisa.gov/news-events/cybersecurity-advisories/aa24-038a",
+    "fingerprint_patterns": {
+      "http_title": ["EdgeOS", "Ubiquiti EdgeRouter Lite"],
+      "http_headers": {
+        "Server": "lighttpd"
+      },
+      "default_admin_paths": ["/", "/api/edge/auth.json"],
+      "default_credentials": {"username": "ubnt", "password": "ubnt"},
+      "open_ports": [22, 80, 443]
+    }
+  },
+  {
+    "manufacturer": "Ubiquiti",
+    "model": "EdgeRouter 4",
+    "cves": ["CVE-2023-31998", "CVE-2021-22909"],
+    "campaign": "Operation Dying Ember / Moobot Botnet",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Same as EdgeRouter X — heap overflow in multicast daemon for unauthenticated RCE; ER-4's quad-port design made it attractive for network edge compromise",
+    "severity": "critical",
+    "affected_firmware": "EdgeOS v2.0.9 and below",
+    "remediation": "Upgrade EdgeOS, change default credentials, disable WAN management",
+    "advisory_url": "https://www.cisa.gov/news-events/cybersecurity-advisories/aa24-038a",
+    "fingerprint_patterns": {
+      "http_title": ["EdgeOS", "Ubiquiti EdgeRouter 4", "ER-4"],
+      "http_headers": {
+        "Server": "lighttpd"
+      },
+      "default_admin_paths": ["/", "/api/edge/auth.json"],
+      "default_credentials": {"username": "ubnt", "password": "ubnt"},
+      "open_ports": [22, 80, 443]
+    }
+  },
+  {
+    "manufacturer": "Ubiquiti",
+    "model": "EdgeRouter 6P",
+    "cves": ["CVE-2023-31998", "CVE-2021-22909"],
+    "campaign": "Operation Dying Ember / Moobot Botnet",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Same as EdgeRouter X — heap overflow in multicast daemon for unauthenticated RCE; ER-6P's PoE ports made it valuable for compromising IP cameras and phones in addition to network routing",
+    "severity": "critical",
+    "affected_firmware": "EdgeOS v2.0.9 and below",
+    "remediation": "Upgrade EdgeOS, change default credentials, disable WAN management, disable unnecessary PoE outputs",
+    "advisory_url": "https://www.cisa.gov/news-events/cybersecurity-advisories/aa24-038a",
+    "fingerprint_patterns": {
+      "http_title": ["EdgeOS", "Ubiquiti EdgeRouter 6P", "ER-6P"],
+      "http_headers": {
+        "Server": "lighttpd"
+      },
+      "default_admin_paths": ["/", "/api/edge/auth.json"],
+      "default_credentials": {"username": "ubnt", "password": "ubnt"},
+      "open_ports": [22, 80, 443]
+    }
+  },
+  {
+    "manufacturer": "Ubiquiti",
+    "model": "EdgeRouter 12",
+    "cves": ["CVE-2023-31998", "CVE-2021-22909"],
+    "campaign": "Operation Dying Ember / Moobot Botnet",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Same as EdgeRouter X — heap overflow in multicast daemon for unauthenticated RCE; ER-12's 12-port rack-mounted form factor targeted in small business/SMB environments",
+    "severity": "critical",
+    "affected_firmware": "EdgeOS v2.0.9 and below",
+    "remediation": "Upgrade EdgeOS, change default ubnt/ubnt credentials, disable WAN management, review firewall rules",
+    "advisory_url": "https://www.cisa.gov/news-events/cybersecurity-advisories/aa24-038a",
+    "fingerprint_patterns": {
+      "http_title": ["EdgeOS", "Ubiquiti EdgeRouter 12", "ER-12"],
+      "http_headers": {
+        "Server": "lighttpd"
+      },
+      "default_admin_paths": ["/", "/api/edge/auth.json"],
+      "default_credentials": {"username": "ubnt", "password": "ubnt"},
+      "open_ports": [22, 80, 443]
+    }
+  },
+  {
+    "manufacturer": "MikroTik",
+    "model": "RouterBOARD hAP ac",
+    "cves": ["CVE-2018-14847", "CVE-2023-30799"],
+    "campaign": "FrostArmada / Operation Masquerade — Ukrainian infrastructure targeting",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "CVE-2018-14847: Winbox (TCP 8291) authentication bypass allows unauthenticated read of /flash/rw/store/user.dat credential file containing MD5-like password hashes. CVE-2023-30799: privilege escalation from admin to 'super-admin' root in RouterOS via HTTP API — unauthenticated on versions prior to 6.49.8/7.10beta8 when HTTP/Winbox accessible. Combined: extract credentials then escalate to full root access for persistent implant installation",
+    "severity": "critical",
+    "affected_firmware": "RouterOS 6.x prior to 6.49.8; 7.x prior to 7.9.2; hAP ac and hAP ac2 both confirmed exploited",
+    "remediation": "Upgrade RouterOS to 6.49.8+ or 7.9.2+; disable Winbox (TCP 8291) from WAN interface; disable HTTP API from WAN; change default admin credentials (default is admin with empty password); review /ip firewall filter for unexpected rules; check /system scheduler for malicious cron entries",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["MikroTik RouterOS", "RouterOS", "hAP ac"],
+      "http_headers": {
+        "Server": "nginx/1.0"
+      },
+      "default_admin_paths": ["/", "/webfig/"],
+      "default_credentials": {"username": "admin", "password": ""},
+      "open_ports": [21, 22, 23, 80, 443, 8291, 8728, 8729],
+      "service_fingerprints": {
+        "8291": "MikroTik Winbox",
+        "8728": "MikroTik API",
+        "8729": "MikroTik API-SSL"
+      }
+    }
+  },
+  {
+    "manufacturer": "MikroTik",
+    "model": "RouterBOARD hAP ac2",
+    "cves": ["CVE-2018-14847", "CVE-2023-30799"],
+    "campaign": "FrostArmada / Operation Masquerade — Ukrainian infrastructure targeting",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Same as hAP ac: Winbox auth bypass (CVE-2018-14847) for credential extraction + CVE-2023-30799 privilege escalation to root",
+    "severity": "critical",
+    "affected_firmware": "RouterOS 6.x prior to 6.49.8; 7.x prior to 7.9.2",
+    "remediation": "Upgrade RouterOS, disable Winbox from WAN, change default empty-password admin credential",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["MikroTik RouterOS", "RouterOS", "hAP ac2"],
+      "http_headers": {
+        "Server": "nginx/1.0"
+      },
+      "default_admin_paths": ["/", "/webfig/"],
+      "default_credentials": {"username": "admin", "password": ""},
+      "open_ports": [22, 80, 443, 8291, 8728, 8729]
+    }
+  },
+  {
+    "manufacturer": "MikroTik",
+    "model": "RouterBOARD hAP lite",
+    "cves": ["CVE-2018-14847", "CVE-2023-30799"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Same vector as hAP ac via Winbox protocol and HTTP API on TCP 8291/8728",
+    "severity": "high",
+    "affected_firmware": "RouterOS 6.x prior to 6.49.8",
+    "remediation": "Upgrade RouterOS, disable Winbox from WAN, change default empty-password admin credential",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["MikroTik RouterOS", "hAP lite"],
+      "http_headers": {
+        "Server": "nginx/1.0"
+      },
+      "default_admin_paths": ["/", "/webfig/"],
+      "default_credentials": {"username": "admin", "password": ""},
+      "open_ports": [22, 80, 8291, 8728]
+    }
+  },
+  {
+    "manufacturer": "MikroTik",
+    "model": "RouterBOARD RB750",
+    "cves": ["CVE-2018-14847", "CVE-2023-30799"],
+    "campaign": "FrostArmada / Operation Masquerade — Ukrainian infrastructure targeting",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Winbox (TCP 8291) credential extraction via CVE-2018-14847; RB750/RB750r2/RB750G series widely deployed as SOHO routers across Eastern Europe making them high-value targets; APT28 uses compromised units as proxy nodes within FrostArmada botnet",
+    "severity": "critical",
+    "affected_firmware": "RouterOS 6.x prior to 6.49.8",
+    "remediation": "Upgrade RouterOS, block Winbox TCP 8291 from WAN, change admin credentials",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["MikroTik RouterOS", "RB750"],
+      "http_headers": {
+        "Server": "nginx/1.0"
+      },
+      "default_admin_paths": ["/", "/webfig/"],
+      "default_credentials": {"username": "admin", "password": ""},
+      "open_ports": [22, 80, 8291, 8728]
+    }
+  },
+  {
+    "manufacturer": "MikroTik",
+    "model": "RouterBOARD RB951",
+    "cves": ["CVE-2018-14847", "CVE-2023-30799"],
+    "campaign": "FrostArmada / Operation Masquerade — Ukrainian infrastructure targeting",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Same as RB750: Winbox authentication bypass for credential theft, used as botnet proxy node in FrostArmada campaign infrastructure",
+    "severity": "critical",
+    "affected_firmware": "RouterOS 6.x prior to 6.49.8; RB951Ui-2nD (hAP) and RB951G-2HnD both affected",
+    "remediation": "Upgrade RouterOS, block Winbox from WAN, change default credentials",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["MikroTik RouterOS", "RB951"],
+      "http_headers": {
+        "Server": "nginx/1.0"
+      },
+      "default_admin_paths": ["/", "/webfig/"],
+      "default_credentials": {"username": "admin", "password": ""},
+      "open_ports": [22, 80, 8291, 8728]
+    }
+  },
+  {
+    "manufacturer": "MikroTik",
+    "model": "RouterBOARD RB2011",
+    "cves": ["CVE-2018-14847", "CVE-2023-30799"],
+    "campaign": "FrostArmada / Operation Masquerade",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Winbox CVE-2018-14847 credential extraction; RB2011 series is enterprise/ISP-grade with 10-port switching — compromise enables network-wide lateral movement; APT28 uses RB2011 units compromised via Winbox as persistent proxy relay nodes for C2 traffic obfuscation",
+    "severity": "critical",
+    "affected_firmware": "RouterOS 6.x prior to 6.49.8; RB2011UiAS-2HnD-IN confirmed affected",
+    "remediation": "Upgrade RouterOS to 6.49.8+, disable Winbox and HTTP API on WAN interfaces, change admin credentials, review ip/firewall/filter for persistence",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["MikroTik RouterOS", "RB2011"],
+      "http_headers": {
+        "Server": "nginx/1.0"
+      },
+      "default_admin_paths": ["/", "/webfig/"],
+      "default_credentials": {"username": "admin", "password": ""},
+      "open_ports": [22, 80, 443, 8291, 8728, 8729]
+    }
+  },
+  {
+    "manufacturer": "MikroTik",
+    "model": "Cloud Core Router CCR1009",
+    "cves": ["CVE-2018-14847", "CVE-2023-30799"],
+    "campaign": "FrostArmada / Operation Masquerade — high-bandwidth proxy infrastructure",
+    "threat_actor": "APT28 / GRU Unit 26165 (Fancy Bear)",
+    "attack_vector": "Winbox CVE-2018-14847 + CVE-2023-30799 root escalation; CCR1009 tile-processor architecture provides ~12 Gbps routing throughput making compromised units high-value relay nodes for large-scale data exfiltration and C2 proxy infrastructure in FrostArmada network",
+    "severity": "critical",
+    "affected_firmware": "RouterOS 6.x prior to 6.49.8; CCR1009-7G-1C-1S+ and CCR1009-8G-1S-1S+ confirmed in advisory",
+    "remediation": "Upgrade RouterOS to 6.49.8+, disable all management ports from WAN, change credentials, inspect /file/ for implanted scripts, check /system/script for malicious entries",
+    "advisory_url": "https://www.ic3.gov/PSA/2026/PSA260407",
+    "fingerprint_patterns": {
+      "http_title": ["MikroTik RouterOS", "CCR1009", "Cloud Core Router"],
+      "http_headers": {
+        "Server": "nginx/1.0"
+      },
+      "default_admin_paths": ["/", "/webfig/"],
+      "default_credentials": {"username": "admin", "password": ""},
+      "open_ports": [22, 80, 443, 8291, 8728, 8729],
+      "service_fingerprints": {
+        "8291": "MikroTik Winbox",
+        "8728": "MikroTik API",
+        "8729": "MikroTik API-SSL"
+      }
+    }
+  }
+]

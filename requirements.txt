@@ -1,0 +1,16 @@
+fastapi==0.115.12
+uvicorn[standard]==0.34.2
+pydantic==2.11.3
+pydantic-settings==2.9.1
+sqlalchemy==2.0.41
+aiosqlite==0.21.0
+alembic==1.15.2
+scapy==2.6.1
+netifaces2==0.0.22
+claude-agent-sdk
+httpx==0.28.1
+structlog==25.4.0
+apscheduler==3.11.0
+dnspython==2.7.0
+pytest==8.3.5
+pytest-asyncio==0.26.0

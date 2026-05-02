@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "name": "APT28 / Forest Blizzard Indicators",
+    "version": "2026.04.30",
+    "sources": [
+      "FBI IC3 PSA260407",
+      "UK NCSC Advisory April 2026",
+      "NSA/DoD CSA Feb 2024",
+      "Lumen Black Lotus Labs FrostArmada"
+    ],
+    "last_updated": "2026-04-30"
+  },
+  "indicators": {
+    "ipv4_ranges": [
+      {"cidr": "5.226.137.0/24", "campaign": "FrostArmada", "confidence": "high"},
+      {"cidr": "37.221.64.0/24", "campaign": "FrostArmada", "confidence": "high"},
+      {"cidr": "77.83.197.0/24", "campaign": "FrostArmada", "confidence": "high"},
+      {"cidr": "79.141.161.0/24", "campaign": "FrostArmada", "confidence": "high"},
+      {"cidr": "185.237.166.0/24", "campaign": "FrostArmada", "confidence": "high"},
+      {"cidr": "64.44.154.0/24", "campaign": "FrostArmada", "confidence": "high"},
+      {"cidr": "79.141.173.0/24", "campaign": "FrostArmada", "confidence": "high"},
+      {"cidr": "103.140.186.0/24", "campaign": "FrostArmada", "confidence": "high"},
+      {"cidr": "185.234.73.0/24", "campaign": "FrostArmada", "confidence": "high"}
+    ],
+    "ipv4_specific": [
+      {"ip": "64.120.31.96", "campaign": "FrostArmada", "first_seen": "2025-05", "confidence": "high"},
+      {"ip": "79.141.160.78", "campaign": "FrostArmada", "first_seen": "2025-08", "confidence": "high"}
+    ],
+    "domains": [
+      {"domain": "autodiscover-s.outlook.com", "type": "targeted_service", "note": "Legitimate domain targeted for MITM redirection — flag if DNS resolves to non-Microsoft IP"},
+      {"domain": "imap-mail.outlook.com", "type": "targeted_service"},
+      {"domain": "outlook.live.com", "type": "targeted_service"},
+      {"domain": "outlook.office365.com", "type": "targeted_service"}
+    ],
+    "ports": [
+      {"port": 56777, "protocol": "tcp", "campaign": "Dying Ember", "description": "APT28 SSH tunnel port"},
+      {"port": 35681, "protocol": "tcp", "campaign": "Dying Ember", "description": "APT28 SSH tunnel port"}
+    ],
+    "service_banners": [
+      {"pattern": "dnsmasq-2.85", "port": 53, "protocol": "udp", "campaign": "FrostArmada", "description": "DNS service fingerprint associated with APT28 infrastructure"}
+    ]
+  }
+}
